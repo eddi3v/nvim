@@ -27,6 +27,9 @@ Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
+"FloatTerm
+Plug 'voldikss/vim-floaterm'
+
 "Autoindents
 Plug 'jiangmiao/auto-pairs'
 
@@ -136,6 +139,11 @@ let g:compe.source.ultisnips = v:true
 let g:compe.source.luasnip = v:true
 let g:compe.source.emoji = v:true
 
+"FloatTerm Setup
+let g:floaterm_shell = 'fish'
+nnoremap <A-t> :FloatermNew<CR>
+let g:floaterm_keymap_toggle = '<Space>t'
+
 "Editor settings
 set number relativenumber
 set nowrap 
@@ -149,6 +157,7 @@ set expandtab
 set smartindent
 set smarttab
 set virtualedit+=onemore
+set hidden
 
 "Key binds
 "Save
@@ -182,7 +191,7 @@ nnoremap <Space>. :FZF <Enter>
 
 "Nerdtree
 nnoremap <Space>n :NERDTreeFocus<CR>
-nnoremap <C-t> :NERDTree<CR>
+"nnoremap <C-t> :NERDTree<CR>
 nnoremap <C-n> :NERDTreeToggle<CR>
 nnoremap <C-f> :NERDTreeFind<CR>
 
