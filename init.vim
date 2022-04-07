@@ -7,6 +7,7 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'morhetz/gruvbox'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'nvim-lualine/lualine.nvim'
+Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
 
 "Code Completion
 Plug 'neovim/nvim-lspconfig'
@@ -23,25 +24,35 @@ Plug 'BurntSushi/ripgrep'
 "Autoindents
 Plug 'jiangmiao/auto-pairs'
 
+"Easymotion better vim movements
+Plug 'easymotion/vim-easymotion'
+
 "Git 
 Plug 'tpope/vim-fugitive'
 
 call plug#end()
 
-set background=dark
-let g:gruvbox_contrast_dark='medium'
+"set background=dark
+"let g:gruvbox_contrast_dark='medium'
+let g:tokyonight_style = "storm"
+
+" Change the "hint" color to the "orange" color, and make the "error" color bright red
+let g:tokyonight_colors = {
+  \ 'hint': 'orange',
+  \ 'error': '#ff0000'
+\ }
 
 au ColorScheme * hi Normal ctermbg=none guibg=none
 au ColorScheme myspecialcolors hi Normal ctermbg=red guibg=red
 
 "Colorscheme and themes
-colorscheme gruvbox
+colorscheme tokyonight
 
 lua << EOF
 require('lualine').setup {
     options = {
         icons_enabled = true,
-        theme = 'auto',
+        theme = 'tokyonight',
         section_separators = '', 
         component_separators = ''
     }
@@ -87,7 +98,7 @@ nnoremap <silent> <C-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
 nnoremap <silent> <C-n> <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
 nnoremap <silent> <C-p> <cmd>lua vim.lsp.diagnostic.goto_next()<CR>
 
-" auto-format
+"auto-format
 "autocmd BufWritePre *.js lua vim.lsp.buf.formatting_sync(nil, 100)
 "autocmd BufWritePre *.jsx lua vim.lsp.buf.formatting_sync(nil, 100)
 "autocmd BufWritePre *.py lua vim.lsp.buf.formatting_sync(nil, 100)
@@ -161,7 +172,14 @@ inoremap <silent> <C-k> <C-p>
 inoremap <silent> <C-j> <C-n>
 
 "FZF
-nnoremap <C-Enter> :FZF <Enter>
+nnoremap <Space>. :FZF <Enter>
 
 "Command Mode remap
 nnoremap ; :
+
+"Easymotion
+map <Space> <Plug>(easymotion-prefix)
+map <Space>f <Plug>(easymotion-overwin-f)
+map <Space>j <Plug>(easymotion-overwin-line)
+map <Space>k <Plug>(easymotion-overwin-line)
+map <Space>w <Plug>(easymotion-overwin-w)
