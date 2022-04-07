@@ -6,6 +6,7 @@ call plug#begin('~/.config/nvim/plugged')
 "Themes
 Plug 'morhetz/gruvbox'
 Plug 'kyazdani42/nvim-web-devicons'
+Plug 'ryanoasis/vim-devicons'
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
 
@@ -20,6 +21,11 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'airblade/vim-rooter'
 Plug 'BurntSushi/ripgrep'
+
+"NerdTree
+Plug 'preservim/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 "Autoindents
 Plug 'jiangmiao/auto-pairs'
@@ -173,6 +179,12 @@ inoremap <silent> <C-j> <C-n>
 
 "FZF
 nnoremap <Space>. :FZF <Enter>
+
+"Nerdtree
+nnoremap <Space>n :NERDTreeFocus<CR>
+nnoremap <C-t> :NERDTree<CR>
+nnoremap <C-n> :NERDTreeToggle<CR>
+nnoremap <C-f> :NERDTreeFind<CR>
 
 "Command Mode remap
 nnoremap ; :
