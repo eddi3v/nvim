@@ -51,8 +51,8 @@ let g:tokyonight_colors = {
   \ 'error': '#ff0000'
 \ }
 
-au ColorScheme * hi Normal ctermbg=none guibg=none
-au ColorScheme myspecialcolors hi Normal ctermbg=red guibg=red
+"au ColorScheme * hi Normal ctermbg=none guibg=none
+"au ColorScheme myspecialcolors hi Normal ctermbg=red guibg=red
 
 "Colorscheme and themes
 colorscheme tokyonight
@@ -72,7 +72,7 @@ EOF
 lua << EOF
 require'nvim-treesitter.configs'.setup {
   -- One of "all", "maintained" (parsers with maintainers), or a list of languages
-  ensure_installed = "maintained",
+  ensure_installed = "all",
 
   -- Install languages synchronously (only applied to `ensure_installed`)
   sync_install = false,
@@ -144,6 +144,8 @@ let g:floaterm_shell = 'fish'
 nnoremap <A-t> :FloatermNew<CR>
 let g:floaterm_keymap_toggle = '<Space>t'
 
+"Font settings
+set guifont=TerminessTTF\ Nerd\ Font\ Mono:h16
 "Editor settings
 set number relativenumber
 set nowrap 
