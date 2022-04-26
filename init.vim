@@ -141,6 +141,9 @@ let g:compe.source.emoji = v:true
 
 "FloatTerm Setup
 let g:floaterm_shell = 'fish'
+let g:floaterm_wintype = 'split'
+let g:floaterm_height = 0.3
+let g:floaterm_title = 'Terminal: $1/$2'
 nnoremap <A-t> :FloatermNew<CR>
 let g:floaterm_keymap_toggle = '<Space>t'
 
