@@ -27,6 +27,9 @@ Plug 'rafamadriz/friendly-snippets'
 Plug 'glepnir/lspsaga.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
+"Debugger, multi-language support
+Plug 'puremourning/vimspector'
+
 "FZF
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
