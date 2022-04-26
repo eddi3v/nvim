@@ -82,6 +82,27 @@ require('lualine').setup {
 }
 EOF
 
+lua << EOF
+ require'tabline'.setup {
+      -- Defaults configuration options
+      enable = true,
+      options = {
+      -- If lualine is installed tabline will use separators configured in lualine by default.
+      -- These options can be used to override those settings.
+        section_separators = {'', ''},
+        component_separators = {'', ''},
+        max_bufferline_percent = 66, -- set to nil by default, and it uses vim.o.columns * 2/3
+        show_tabs_always = false, -- this shows tabs only when there are more than one tab or if the first tab is named
+        show_devicons = true, -- this shows devicons in buffer section
+        show_bufnr = false, -- this appends [bufnr] to buffer section,
+        show_filename_only = false, -- shows bse filename only instead of relative path in filename
+        modified_icon = "+ ", -- change the default modified icon
+        modified_italic = false, -- set to true by default; this determines whether the filename turns italic if modified
+        show_tabs_only = false, -- this shows only tabs instead of tabs + buffers
+      }
+    }
+EOF
+
 "Tree-sitter config
 lua << EOF
 require'nvim-treesitter.configs'.setup {
@@ -117,41 +138,110 @@ nnoremap <silent> gD <cmd>lua vim.lsp.buf.declaration()<CR>
 nnoremap <silent> gr <cmd>lua vim.lsp.buf.references()<CR>
 nnoremap <silent> gi <cmd>lua vim.lsp.buf.implementation()<CR>
 nnoremap <silent> K <cmd>lua vim.lsp.buf.hover()<CR>
-nnoremap <silent> <C-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
-nnoremap <silent> <C-n> <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
-nnoremap <silent> <C-p> <cmd>lua vim.lsp.diagnostic.goto_next()<CR>
-
+" Worry about these later
+"nnoremap <silent> <C-p> <cmd>lua vim.lsp.buf.signature_help()<CR>
+"nnoremap <silent> <C-j> <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
+"nnoremap <silent> <C-k> <cmd>lua vim.lsp.diagnostic.goto_next()<CR>
+"
 "auto-format
 "autocmd BufWritePre *.js lua vim.lsp.buf.formatting_sync(nil, 100)
 "autocmd BufWritePre *.jsx lua vim.lsp.buf.formatting_sync(nil, 100)
 "autocmd BufWritePre *.py lua vim.lsp.buf.formatting_sync(nil, 100)
 
-"LSP Compe Autocomplete
-let g:compe = {}
-let g:compe.enabled = v:true
-let g:compe.autocomplete = v:true
-let g:compe.debug = v:false
-let g:compe.min_length = 1
-let g:compe.preselect = 'enable'
-let g:compe.throttle_time = 80
-let g:compe.source_timeout = 200
-let g:compe.resolve_timeout = 800
-let g:compe.incomplete_delay = 400
-let g:compe.max_abbr_width = 100
-let g:compe.max_kind_width = 100
-let g:compe.max_menu_width = 100
-let g:compe.documentation = v:true
+set completeopt=menu,menuone,noselect
 
-let g:compe.source = {}
-let g:compe.source.path = v:true
-let g:compe.source.buffer = v:true
-let g:compe.source.calc = v:true
-let g:compe.source.nvim_lsp = v:true
-let g:compe.source.nvim_lua = v:true
-let g:compe.source.vsnip = v:true
-let g:compe.source.ultisnips = v:true
-let g:compe.source.luasnip = v:true
-let g:compe.source.emoji = v:true
+lua <<EOF
+  -- Setup nvim-cmp.
+  local cmp = require'cmp'
+
+  cmp.setup({
+    snippet = {
+      -- REQUIRED - you must specify a snippet engine
+      expand = function(args)
+        vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+        -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+        -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
+        -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+      end,
+    },
+    window = {
+      -- completion = cmp.config.window.bordered(),
+      -- documentation = cmp.config.window.bordered(),
+    },
+    mapping = cmp.mapping.preset.insert({
+      ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-f>'] = cmp.mapping.scroll_docs(4),
+      ['<C-Space>'] = cmp.mapping.complete(),
+      ['<C-e>'] = cmp.mapping.abort(),
+      ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+      ["<C-j>"] = cmp.mapping(function(fallback)
+        if vim.fn.pumvisible() == 1 then
+            feedkey("<C-n>", "n")
+        elseif cmp.visible() then
+            cmp.select_next_item()
+        else
+            fallback()
+        end
+      end, {
+        "i",
+      }),
+      ["<C-k>"] = cmp.mapping(function(fallback)
+        if vim.fn.pumvisible() == 1 then
+            feedkey("<C-p>", "n")
+        elseif cmp.visible() then
+            cmp.select_prev_item()
+        else
+            fallback()
+        end
+    end, {
+      "i",
+    }),
+    }),
+    sources = cmp.config.sources({
+      { name = 'nvim_lsp' },
+      { name = 'vsnip' }, -- For vsnip users.
+      -- { name = 'luasnip' }, -- For luasnip users.
+      -- { name = 'ultisnips' }, -- For ultisnips users.
+      -- { name = 'snippy' }, -- For snippy users.
+    }, {
+      { name = 'buffer' },
+    })
+  })
+
+  -- Set configuration for specific filetype.
+  cmp.setup.filetype('gitcommit', {
+    sources = cmp.config.sources({
+      { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
+    }, {
+      { name = 'buffer' },
+    })
+  })
+
+  -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
+  cmp.setup.cmdline('/', {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = {
+      { name = 'buffer' }
+    }
+  })
+
+  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+  cmp.setup.cmdline(':', {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = cmp.config.sources({
+      { name = 'path' }
+    }, {
+      { name = 'cmdline' }
+    })
+  })
+
+  -- Setup lspconfig.
+  local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
+  require('lspconfig')['<YOUR_LSP_SERVER>'].setup {
+    capabilities = capabilities
+  }
+EOF
 
 "FloatTerm Setup
 let g:floaterm_shell = 'fish'
@@ -195,15 +285,17 @@ nmap <silent> <C-v> "+p
 imap <silent> <C-v> "+p
 imap <silent> <C-v> <Esc>"+pa
 
-"Tabs
+"Default Tabs
 nnoremap <C-t> :tabnew <Enter>
 nnoremap <C-h> gT
 nnoremap <C-l> gt
 nnoremap <C-q> :tabclose <Enter>
-
-"nvim-compe
-inoremap <silent> <C-k> <C-p>
-inoremap <silent> <C-j> <C-n>
+"Added tabs
+nmap <A-l> :TablineBufferNext <Enter>
+nmap <A-h> :TablineBufferPrevious <Enter>
+nmap <A-q> :bd! <Enter>
+"autoformat
+nnoremap <silent> ff <cmd>lua vim.lsp.buf.formatting()<CR>
 
 "FZF
 nnoremap <Space>. :FZF <Enter>
@@ -212,14 +304,14 @@ nnoremap <Space>. :FZF <Enter>
 nnoremap <Space>n :NERDTreeFocus<CR>
 "nnoremap <C-t> :NERDTree<CR>
 nnoremap <C-n> :NERDTreeToggle<CR>
-nnoremap <C-f> :NERDTreeFind<CR>
+nnoremap <-f> :NERDTreeFind<CR>
 
 "Command Mode remap
 nnoremap ; :
 
 "Easymotion
-map <Space> <Plug>(easymotion-prefix)
+map <Space>  <Plug>(easymotion-prefix)
 map <Space>f <Plug>(easymotion-overwin-f)
 map <Space>j <Plug>(easymotion-overwin-line)
 map <Space>k <Plug>(easymotion-overwin-line)
-map <Space>w <Plug>(easymotion-overwin-w)
+map <Space>w <Plug>(easymotion-overwin-w)C
