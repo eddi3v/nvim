@@ -10,6 +10,9 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
 
+"Better tabs
+Plug 'kdheepak/tabline.nvim'
+
 "Code Completion
 Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/nvim-compe'
