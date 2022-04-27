@@ -9,6 +9,7 @@ Plug 'kyazdani42/nvim-web-devicons'
 Plug 'ryanoasis/vim-devicons'
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
+Plug 'https://gitlab.com/yorickpeterse/vim-paper.git'
 
 "Better tabs
 Plug 'kdheepak/tabline.nvim'
@@ -27,7 +28,7 @@ Plug 'rafamadriz/friendly-snippets'
 Plug 'glepnir/lspsaga.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
-"Debugger, multi-language support
+"Debugger, muti-language support
 Plug 'puremourning/vimspector'
 
 "FZF
@@ -35,6 +36,8 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'airblade/vim-rooter'
 Plug 'BurntSushi/ripgrep'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
 
 "NerdTree
 Plug 'preservim/nerdtree'
@@ -46,12 +49,14 @@ Plug 'voldikss/vim-floaterm'
 
 "Autoindents
 Plug 'jiangmiao/auto-pairs'
+Plug 'lukas-reineke/indent-blankline.nvim'
 
 "Easymotion better vim movements
 Plug 'easymotion/vim-easymotion'
 
 "Git 
 Plug 'tpope/vim-fugitive'
+Plug 'lewis6991/gitsigns.nvim'
 
 call plug#end()
 
@@ -71,16 +76,39 @@ let g:tokyonight_colors = {
 "Colorscheme and themes
 colorscheme tokyonight
 
+"Default lualine setup
 lua << EOF
 require('lualine').setup {
-    options = {
-        icons_enabled = true,
-        theme = 'tokyonight',
-        section_separators = '', 
-        component_separators = ''
-    }
+  options = {
+    icons_enabled = true,
+   theme = 'auto',
+   component_separators = { left = '', right = ''},
+   section_separators = { left = '', right = ''},
+   disabled_filetypes = {},
+   always_divide_middle = true,
+   globalstatus = false,
+ },
+ sections = {
+   lualine_a = {'mode'},
+   lualine_b = {'branch', 'diff', 'diagnostics'},
+   lualine_c = {'filename'},
+   lualine_x = {'encoding', 'fileformat', 'filetype'},
+   lualine_y = {'progress'},
+   lualine_z = {'location'}
+ },
+ inactive_sections = {
+   lualine_a = {},
+   lualine_b = {},
+   lualine_c = {'filename'},
+   lualine_x = {'location'},
+   lualine_y = {},
+   lualine_z = {}
+ },
+ tabline = {},
+ extensions = {}
 }
 EOF
+
 
 lua << EOF
  require'tabline'.setup {
@@ -89,8 +117,8 @@ lua << EOF
       options = {
       -- If lualine is installed tabline will use separators configured in lualine by default.
       -- These options can be used to override those settings.
-        section_separators = {'', ''},
-        component_separators = {'', ''},
+        --section_separators = {'', ''},
+        --component_separators = {'', ''},
         max_bufferline_percent = 66, -- set to nil by default, and it uses vim.o.columns * 2/3
         show_tabs_always = false, -- this shows tabs only when there are more than one tab or if the first tab is named
         show_devicons = true, -- this shows devicons in buffer section
@@ -103,6 +131,14 @@ lua << EOF
     }
 EOF
 
+"Indent line setup
+lua << EOF
+require("indent_blankline").setup {
+    space_char_blankline = " ",
+    show_current_context = true,
+    show_current_context_start = true,
+}
+EOF
 "Tree-sitter config
 lua << EOF
 require'nvim-treesitter.configs'.setup {
@@ -246,14 +282,18 @@ EOF
 "FloatTerm Setup
 let g:floaterm_shell = 'fish'
 let g:floaterm_wintype = 'split'
-let g:floaterm_height = 0.3
+let g:floaterm_height = 0.4
 let g:floaterm_title = 'Terminal: $1/$2'
 nnoremap <A-t> :FloatermNew<CR>
-let g:floaterm_keymap_toggle = '<Space>t'
+let g:floaterm_keymap_toggle = '<Tab>t'
 
-"Font settings
-set guifont=TerminessTTF\ Nerd\ Font\ Mono:h16
+"Neovide (GUI) settings
+set guifont=TerminessTTF\ Nerd\ Font\ Mono:h14
+let g:neovide_refresh_rate=140
+let g:neovide_cursor_antialiasing=v:false
+
 "Editor settings
+set mouse=a
 set number relativenumber
 set nowrap 
 set noshowmode
@@ -286,25 +326,26 @@ imap <silent> <C-v> "+p
 imap <silent> <C-v> <Esc>"+pa
 
 "Default Tabs
-nnoremap <C-t> :tabnew <Enter>
-nnoremap <C-h> gT
-nnoremap <C-l> gt
-nnoremap <C-q> :tabclose <Enter>
+nnoremap <silent> <C-t> :tabnew <Enter>
+nnoremap <silent> <C-h> gT
+nnoremap <silent> <C-l> gt
+nnoremap <silent> <C-q> :tabclose <Enter>
 "Added tabs
-nmap <A-l> :TablineBufferNext <Enter>
-nmap <A-h> :TablineBufferPrevious <Enter>
-nmap <A-q> :bd! <Enter>
+nmap <silent> <A-l> :TablineBufferNext <Enter>
+nmap <silent> <A-h> :TablineBufferPrevious <Enter>
+nmap <silent> <A-q> :bd! <Enter>
 "autoformat
 nnoremap <silent> ff <cmd>lua vim.lsp.buf.formatting()<CR>
 
 "FZF
-nnoremap <Space>. :FZF <Enter>
+nnoremap <silent> <Space>. :Telescope find_files <Enter>
+nnoremap <silent> <Space>r :Telescope live_grep <Enter>
 
 "Nerdtree
 nnoremap <Space>n :NERDTreeFocus<CR>
 "nnoremap <C-t> :NERDTree<CR>
 nnoremap <C-n> :NERDTreeToggle<CR>
-nnoremap <-f> :NERDTreeFind<CR>
+nnoremap <C-f> :NERDTreeFind<CR>
 
 "Command Mode remap
 nnoremap ; :
@@ -314,4 +355,4 @@ map <Space>  <Plug>(easymotion-prefix)
 map <Space>f <Plug>(easymotion-overwin-f)
 map <Space>j <Plug>(easymotion-overwin-line)
 map <Space>k <Plug>(easymotion-overwin-line)
-map <Space>w <Plug>(easymotion-overwin-w)C
+map <Space>w <Plug>(easymotion-overwin-w)l
