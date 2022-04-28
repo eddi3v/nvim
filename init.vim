@@ -16,6 +16,7 @@ Plug 'kdheepak/tabline.nvim'
 
 "Code Completion
 Plug 'neovim/nvim-lspconfig'
+Plug 'ray-x/lsp_signature.nvim'
 " Deprecated Plug 'hrsh7th/nvim-compe'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
@@ -180,13 +181,14 @@ nnoremap <silent> K <cmd>lua vim.lsp.buf.hover()<CR>
 "nnoremap <silent> <C-k> <cmd>lua vim.lsp.diagnostic.goto_next()<CR>
 "
 "auto-format
+nnoremap <silent> ff <cmd>lua vim.lsp.buf.formatting()<CR>
 "autocmd BufWritePre *.js lua vim.lsp.buf.formatting_sync(nil, 100)
 "autocmd BufWritePre *.jsx lua vim.lsp.buf.formatting_sync(nil, 100)
 "autocmd BufWritePre *.py lua vim.lsp.buf.formatting_sync(nil, 100)
 
 set completeopt=menu,menuone,noselect
 
-lua <<EOF
+lua << EOF
   -- Setup nvim-cmp.
   local cmp = require'cmp'
 
@@ -334,8 +336,6 @@ nnoremap <silent> <C-q> :tabclose <Enter>
 nmap <silent> <A-l> :TablineBufferNext <Enter>
 nmap <silent> <A-h> :TablineBufferPrevious <Enter>
 nmap <silent> <A-q> :bd! <Enter>
-"autoformat
-nnoremap <silent> ff <cmd>lua vim.lsp.buf.formatting()<CR>
 
 "FZF
 nnoremap <silent> <Space>. :Telescope find_files <Enter>
