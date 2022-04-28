@@ -133,13 +133,13 @@ lua << EOF
 EOF
 
 "Indent line setup
-lua << EOF
-require("indent_blankline").setup {
-    space_char_blankline = " ",
-    show_current_context = true,
-    show_current_context_start = true,
-}
-EOF
+"lua << EOF
+"require("indent_blankline").setup {
+"    space_char_blankline = " ",
+"    show_current_context = true,
+"    show_current_context_start = true,
+"}
+"EOF
 "Tree-sitter config
 lua << EOF
 require'nvim-treesitter.configs'.setup {
@@ -355,4 +355,4 @@ map <Space>  <Plug>(easymotion-prefix)
 map <Space>f <Plug>(easymotion-overwin-f)
 map <Space>j <Plug>(easymotion-overwin-line)
 map <Space>k <Plug>(easymotion-overwin-line)
-map <Space>w <Plug>(easymotion-overwin-w)l
+map <Space>w <Plug>(easymotion-overwin-w)
