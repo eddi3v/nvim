@@ -1,0 +1,12 @@
+require('settings')
+require('colorscheme-config.material')
+require('packer-config')
+require('mappings')
+
+require('plugins.lualine')
+require('plugins.tabline')
+require('plugins.treesitter')
+require('plugins.cmp')
+require('plugins.floaterm')
+require('plugins.telescope')
+require('plugins.gitsigns')
