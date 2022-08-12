@@ -6,7 +6,7 @@ local lualine = require('lualine')
 -- Color table for highlights
 -- stylua: ignore
 local colors = {
-  bg       = '#282b34',
+  bg       = '#121212',
   fg       = '#bbc2cf',
   yellow   = '#e6b757',
   cyan     = '#008080',
@@ -94,6 +94,7 @@ ins_left {
     elseif vim.fn.mode() == 'i' then return "INS"
     elseif vim.fn.mode() == 'v' then return "VIS"
     elseif vim.fn.mode() == 'c' then return "COM"
+    elseif vim.fn.mode() == 't' then return "TERM"
     else return "UNK"
     end
   end,
