@@ -34,7 +34,7 @@ map('n', '<leader>r', ':Telescope live_grep<CR>', opts)
 
 --NerdTree
 map('n', '<leader>n', ':NERDTreeFocus<CR>', opts)
-map('n', '<C-t>', ':NERDTree<CR>', opts)
+map('n', '<C-nt>', ':NERDTree<CR>', opts)
 map('n', '<C-n>', ':NERDTreeToggle<CR>', opts)
 map('n', '<C-f>', ':NERDTreeFind<CR>', opts)
 
