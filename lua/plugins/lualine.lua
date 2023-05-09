@@ -6,17 +6,17 @@ local lualine = require('lualine')
 -- Color table for highlights
 -- stylua: ignore
 local colors = {
-  bg       = '#121212',
-  fg       = '#bbc2cf',
-  yellow   = '#e6b757',
+  bg       = '#262626',
+  fg       = '#8A8A8A',
+  yellow   = '#E6B757',
   cyan     = '#008080',
   darkblue = '#252a40',
-  green    = '#6ac387',
-  orange   = '#f15e38',
-  violet   = '#a9a1e1',
-  magenta  = '#d787d7',
-  blue     = '#69aaff',
-  red      = '#f14039',
+  green    = '#AFAF00',
+  orange   = '#D65D0E',
+  violet   = '#d3869b',
+  magenta  = '#D485AD',
+  blue     = '#83ADAD',
+  red      = '#D75F5F',
 }
 
 local conditions = {
@@ -79,23 +79,15 @@ local function ins_right(component)
 end
 
 ins_left {
-  function()
-    return '▊'
-  end,
-  color = { fg = colors.blue }, -- Sets highlighting of component
-  padding = { left = 0, right = 1 }, -- We don't need space before this
-}
-
-ins_left {
   -- mode component
   function()
     --return ''
-    if vim.fn.mode() == 'n' then return "NOR"
-    elseif vim.fn.mode() == 'i' then return "INS"
-    elseif vim.fn.mode() == 'v' then return "VIS"
-    elseif vim.fn.mode() == 'c' then return "COM"
-    elseif vim.fn.mode() == 't' then return "TERM"
-    else return "UNK"
+    if vim.fn.mode() == 'n' then return "NORMAL"
+    elseif vim.fn.mode() == 'i' then return "INSERT"
+    elseif vim.fn.mode() == 'v' then return "VISUAL"
+    elseif vim.fn.mode() == 'c' then return "COMMAND"
+    elseif vim.fn.mode() == 't' then return "TERMINAL"
+    else return "UNKNOWN"
     end
   end,
   color = function()
@@ -135,8 +127,6 @@ ins_left {
 
 ins_left { 'location' }
 
-ins_left { 'progress', color = { fg = colors.fg } }
-
 ins_left {
   'diagnostics',
   sources = { 'nvim_diagnostic' },
@@ -159,7 +149,7 @@ ins_left {
 ins_left {
   -- Lsp server name .
   function()
-    local msg = 'No Active Lsp'
+    local msg = 'None'
     local buf_ft = vim.api.nvim_buf_get_option(0, 'filetype')
     local clients = vim.lsp.get_active_clients()
     if next(clients) == nil then
@@ -174,7 +164,7 @@ ins_left {
     return msg
   end,
   icon = ' LSP:',
-  color = { fg = '#ffffff' },
+  color = { fg = '#8A8A8A' },
 }
 
 -- Add components to right sections
@@ -193,7 +183,7 @@ ins_right {
 ins_right {
   'fileformat',
   fmt = string.upper,
-  icons_enabled = true, -- I think icons are cool but Eviline doesn't have them. sigh
+  icons_enabled = false, -- I think icons are cool but Eviline doesn't have them. sigh
   color = { fg = colors.fg },
 }
 
@@ -206,21 +196,13 @@ ins_right {
 ins_right {
   'diff',
   -- Is it me or the symbol for modified us really weird
-  symbols = { added = ' ', modified = '柳 ', removed = ' ' },
+  symbols = { added = '  ', modified = '✎  ', removed = '  ' },
   diff_color = {
     added = { fg = colors.green },
     modified = { fg = colors.orange },
     removed = { fg = colors.red },
   },
   cond = conditions.hide_in_width,
-}
-
-ins_right {
-  function()
-    return '▊'
-  end,
-  color = { fg = colors.blue },
-  padding = { left = 1 },
 }
 
 -- Now don't forget to initialize lualine
