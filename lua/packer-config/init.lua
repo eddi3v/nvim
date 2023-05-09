@@ -13,6 +13,7 @@ return require('packer').startup(function()
     use 'ryanoasis/vim-devicons'
     use 'folke/tokyonight.nvim'
     use 'kaicataldo/material.vim'
+    use 'chriskempson/base16-vim'
 
     --Editor
     use 'nvim-lualine/lualine.nvim'
