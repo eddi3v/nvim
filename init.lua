@@ -1,5 +1,5 @@
 require('settings')
-require('colorscheme-config.material')
+require('colorscheme-config')
 require('packer-config')
 require('mappings')
 
