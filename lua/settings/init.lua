@@ -1,5 +1,7 @@
 local set = vim.opt
 
+set.guifont = 'Fixedsys Excelsior 3.01'
+
 set.mouse = 'a'
 set.relativenumber = true
 set.number = true
