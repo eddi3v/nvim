@@ -40,7 +40,7 @@ return require('packer').startup(function()
 
     --Syntax Highliting
     use 'nvim-treesitter/nvim-treesitter'
-    
+
     --Code Snippets
     use 'hrsh7th/vim-vsnip'
     use 'hrsh7th/vim-vsnip-integ'
