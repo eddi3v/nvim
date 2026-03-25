@@ -1,11 +1,4 @@
 require('settings')
-require('colorscheme-config')
-require('packer-config')
 require('mappings')
-
-require('plugins.lualine')
-require('plugins.tabline')
-require('plugins.treesitter')
-require('plugins.floaterm')
-require('plugins.telescope')
-require('plugins.gitsigns')
+require('lazy-config')
+require('colorscheme-config')

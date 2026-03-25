@@ -1,3 +1,1 @@
-vim.cmd [[
-    colorscheme base16-gruvbox-dark-pale
-]]
+vim.cmd([[colorscheme moonfly]])
